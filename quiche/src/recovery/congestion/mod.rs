@@ -225,20 +225,7 @@ impl Congestion {
     }
 
     fn schedule_next_packet(&mut self, now: Instant, packet_size: usize) {
-        // Don't pace in any of these cases:
-        //   * Packet contains no data.
-        //   * The congestion window is within initcwnd.
-
-        let in_initcwnd = self.congestion_window <
-            self.max_datagram_size * self.initial_congestion_window_packets;
-
-        let sent_bytes = if !self.pacer.enabled() || in_initcwnd {
-            0
-        } else {
-            packet_size
-        };
-
-        self.pacer.send(sent_bytes, now);
+        self.pacer.send(packet_size, now);
     }
 
     pub(crate) fn get_packet_send_time(&self) -> Instant {
