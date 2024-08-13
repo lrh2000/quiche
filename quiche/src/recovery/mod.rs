@@ -700,6 +700,10 @@ impl Recovery {
         self.congestion.congestion_window()
     }
 
+    pub fn bytes_in_flight(&self) -> usize {
+        self.bytes_in_flight
+    }
+
     pub fn cwnd_available(&self) -> usize {
         // Ignore cwnd when sending probe packets.
         if self.epochs.iter().any(|e| e.loss_probes > 0) {
