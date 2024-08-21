@@ -715,6 +715,10 @@ impl Recovery {
             self.congestion.prr.snd_cnt
     }
 
+    pub fn latest_rtt(&self) -> Duration {
+        self.rtt_stats.latest_rtt
+    }
+
     pub fn rtt(&self) -> Duration {
         self.rtt_stats.rtt()
     }

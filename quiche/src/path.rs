@@ -483,6 +483,7 @@ impl Path {
             sent: self.sent_count,
             lost: self.recovery.lost_count(),
             retrans: self.retrans_count,
+            latest_rtt: self.recovery.latest_rtt(),
             rtt: self.recovery.rtt(),
             min_rtt: self.recovery.min_rtt(),
             rttvar: self.recovery.rttvar(),
@@ -856,6 +857,9 @@ pub struct PathStats {
 
     /// The number of sent QUIC packets with retransmitted data.
     pub retrans: usize,
+
+    /// The latest round-trip time.
+    pub latest_rtt: time::Duration,
 
     /// The estimated round-trip time of the connection.
     pub rtt: time::Duration,
