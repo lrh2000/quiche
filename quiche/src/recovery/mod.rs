@@ -792,7 +792,10 @@ impl Recovery {
     fn pto_time_and_space(
         &self, handshake_status: HandshakeStatus, now: Instant,
     ) -> (Option<Instant>, packet::Epoch) {
+        const MAX_PTO: Duration = Duration::from_secs(5);
+
         let mut duration = self.pto() * 2_u32.pow(self.pto_count);
+        duration = duration.min(MAX_PTO);
 
         // Arm PTO from now when there are no inflight packets.
         if self.bytes_in_flight == 0 {
@@ -826,6 +829,7 @@ impl Recovery {
                 // Include max_ack_delay and backoff for Application Data.
                 duration +=
                     self.rtt_stats.max_ack_delay * 2_u32.pow(self.pto_count);
+                duration = duration.min(MAX_PTO);
             }
 
             let new_time = epoch
