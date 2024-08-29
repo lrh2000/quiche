@@ -4443,9 +4443,13 @@ impl Connection {
         // - the application requested an ack-eliciting frame be sent.
         if (ack_elicit_required || path.needs_ack_eliciting) &&
             !ack_eliciting &&
-            left >= 1 &&
+            b.cap() >= 1 &&
             !is_closing
         {
+            if left == 0 {
+                left = 1;
+            }
+
             let frame = frame::Frame::Ping { mtu_probe: None };
 
             if push_frame_to_pkt!(b, frames, frame, left) {
