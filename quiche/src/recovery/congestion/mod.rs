@@ -195,7 +195,7 @@ impl Congestion {
 
         self.schedule_next_packet(now, sent_bytes);
 
-        pkt.time_sent = self.get_packet_send_time();
+        pkt.time_sent = self.get_packet_send_time().max(now);
 
         // bytes_in_flight is already updated. Use previous value.
         self.delivery_rate
